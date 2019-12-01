@@ -3,11 +3,11 @@
 
 TEST(SortTest, Simple){
   std::vector<int> input_list = { 10, 15, 30, 35, 5, 8, 15, 19, 1, 3, 6, 24};
-  std::vector<int> output_list = sort_k_lists(2, input_list);
+  std::vector<int> output_list = sort_k_lists(3, input_list);
   EXPECT_EQ(output_list.size(), input_list.size());
   EXPECT_TRUE(std::is_sorted(std::begin(output_list), std::end(output_list)));
   std::vector<int> actual_result = std::vector<int>(input_list);
-    std::sort(actual_result.begin(), actual_result.end());
+	std::sort(actual_result.begin(), actual_result.end());
   EXPECT_EQ(actual_result, output_list);
 
 }
@@ -17,15 +17,18 @@ TEST(SortTest, LargeVector){
   std::vector<int> input_list;
   srand(time(0));
   for(int i=0; i<n; i=i+(n/k)){
-    for(int j=i; j<i+(n/k); j++){
-      input_list.push_back(rand()%(j+1));
-    }
+	std::vector<int> sorted_random_integers;
+	for(int j=i; j<i+(n/k); j++){
+	    sorted_random_integers.push_back(rand()%(n/k));
+	}
+	sort(sorted_random_integers.begin(), sorted_random_integers.end());
+    input_list.insert(input_list.end(), sorted_random_integers.begin(), sorted_random_integers.end());
   }
   std::vector<int> output_list = sort_k_lists(k, input_list);
   EXPECT_EQ(output_list.size(), input_list.size());
   EXPECT_TRUE(std::is_sorted(std::begin(output_list), std::end(output_list)));
   std::vector<int> actual_result = std::vector<int>(input_list);
-    std::sort(actual_result.begin(), actual_result.end());
+	std::sort(actual_result.begin(), actual_result.end());
   EXPECT_EQ(actual_result, output_list);
 }
 TEST(SortTest, LargeVectorOddnumberSize){
@@ -33,13 +36,16 @@ TEST(SortTest, LargeVectorOddnumberSize){
   std::vector<int> input_list;
   srand(time(0));
   for(int i=0; i<n; i=i+(n/k)){
-    for(int j=i; j<i+(n/k); j++){
-      input_list.push_back(rand()%(j+1));
+    std::vector<int> sorted_random_integers;
+	for(int j=i; j<i+(n/k); j++){
+	    sorted_random_integers.push_back(rand()%(n/k));
     }
+    sort(sorted_random_integers.begin(), sorted_random_integers.end());
+    input_list.insert(input_list.end(), sorted_random_integers.begin(), sorted_random_integers.end());
   }
   std::vector<int> output_list = sort_k_lists(k, input_list);
   std::vector<int> actual_result = std::vector<int>(input_list);
-    std::sort(actual_result.begin(), actual_result.end());
+	std::sort(actual_result.begin(), actual_result.end());
   EXPECT_EQ(output_list.size(), input_list.size());
   EXPECT_TRUE(std::is_sorted(std::begin(output_list), std::end(output_list)));
   EXPECT_TRUE(std::is_sorted(std::begin(actual_result), std::end(actual_result)));

@@ -22,16 +22,14 @@ std::vector<int> sort_k_lists(const int& k,
 
   struct comparator{
     bool operator()(const triple& a, const triple& b) const {
-      return a.val>b.val;
+      return a.val>=b.val;
     }
   };
 
   std::vector<triple> heap = std::vector<triple>();
   for(int i=0; i<(int)input_list.size(); i+=size_of_each_list){
-    for(int j=i; j<(i+k); j++){
-      triple t = {input_list[j],j/size_of_each_list,j-i};
+      triple t = {input_list[i],i/size_of_each_list,0};
       heap.push_back(t); 
-    }
   }
 
   make_heap(heap.begin(), heap.end(),comparator());
@@ -41,7 +39,7 @@ std::vector<int> sort_k_lists(const int& k,
     triple t1 = heap.back();
     heap.pop_back();
     output_list.push_back(t1.val);
-    if((t1.element_index+1)<(size_of_each_list)&&(t1.element_index>=k-1)){
+    if((t1.element_index+1)<(size_of_each_list)){
       triple next_triple = {input_list[(t1.list_index*size_of_each_list)+t1.element_index+1],
                       t1.list_index, t1.element_index+1};
       heap.push_back(next_triple);
