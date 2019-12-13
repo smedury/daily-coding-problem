@@ -3,4 +3,10 @@
 *Makefile
 *cmake_install.cmake
 *executeTests
+.idea*
+.vscode*
+cmake-*
+*.json
+queue_stacks*
+
 

@@ -16,6 +16,8 @@ class node{
   public:
     node(std::string _val) : val(_val), left(nullptr), right(nullptr) {}
     node(const node& _node) : val(_node.val), left(_node.left), right(_node.right) {}
+    node(std::string _val, node* _left, node* _right) : val(_val), left(_left), right(_right) {}
+    node(std::string _val, std::string _left_val, std::string _right_val) : val(_val), left(new node(_left_val)), right(new node(_right_val)) {}
     ~node() {}
     std::string val;
     node *left, *right;
@@ -40,23 +42,43 @@ std::vector<std::string> serialize(const node& _node_in){
     return serialized_tree;
 }
 
-node deserialize(const std::vector<std::string>& serialized_tree) {
+node* deserialize(const std::vector<std::string>& serialized_tree) {
     if(serialized_tree.empty()) throw  std::invalid_argument("INPUT STRING IS EMPTY");
     std::queue<node*> traversal_queue;
-    int traversal_index(0);
-    node* root = new node(serialized_tree[traversal_index]);
+    std::queue<int> traversal_index_queue;
+    node* root = new node(serialized_tree[0]);
     traversal_queue.push(root);
+    traversal_index_queue.push(0);
     while (!traversal_queue.empty()){
-        if(traversal_index*2 < serialized_tree.size()) {
-            traversal_index*=2;
-            node* left_node = new node(serialized_tree[traversal_index]);
+        node* new_node = traversal_queue.front();
+        int traversal_index = traversal_index_queue.front() + 1;
+        traversal_queue.pop();
+        traversal_index_queue.pop();
+        if((traversal_index*2 - 1) < serialized_tree.size()) {
+            node* left_node = new node(serialized_tree[(traversal_index*2)-1]);
+            new_node->left = left_node;
             traversal_queue.push(left_node);
+            traversal_index_queue.push(traversal_index*2-1);
         }
-        if(traversal_index*2 + 1 < serialized_tree.size()) {
-            node* right_node = new node(serialized_tree[traversal_index+1]);
+        else
+        {
+            new_node->left = nullptr;
+        }
+        
+        if(traversal_index*2 < serialized_tree.size()) {
+            node* right_node = new node(serialized_tree[traversal_index*2]);
             traversal_queue.push(right_node);
+            traversal_index_queue.push(traversal_index*2);
+            new_node->right = right_node;
         }
+        else
+        {
+            new_node->right = nullptr;
+        }
+        
     }
+
+    return root;
 }
 
 #endif //DAILY_CODING_PROBLEM_SERIALIZE_DESERIALIZE_TREE_H
