@@ -8,5 +8,7 @@
 cmake-*
 *.json
 queue_stacks*
+_*
+*.pyc
 
 
